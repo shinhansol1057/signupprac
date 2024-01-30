@@ -10,7 +10,7 @@ public class TestController {
 
     @GetMapping("/test")
     public String test(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
-        return "test success";
+        return "test success, userId: " + customUserDetails.getUserId();
     }
 }
 

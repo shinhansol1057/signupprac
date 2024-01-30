@@ -1,5 +1,7 @@
 package com.github.signupprac.config.security;
 
+import com.github.signupprac.config.security.exception.CustomAccessDeniedHandler;
+import com.github.signupprac.config.security.exception.CustomAuthenticationEntryPoint;
 import com.github.signupprac.web.filters.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,9 +32,15 @@ public class SecurityConfig {
 
                 .authorizeRequests(a ->
                         a
-                                .requestMatchers("/resources/static/**", "/sign-up", "/login").permitAll()
-                                .requestMatchers("/test").hasAnyRole("USER")
+                                .requestMatchers("/resources/static/**", "/sign-up", "/login").permitAll() // 로그인 안해도 가능
+                                .requestMatchers("/test").hasRole("USER") // user 권한이 있어야 가능
                 )
+                .exceptionHandling( e-> {
+                    e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                    e.accessDeniedHandler(new CustomAccessDeniedHandler());
+                })
+
+
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

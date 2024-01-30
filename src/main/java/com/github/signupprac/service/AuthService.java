@@ -39,7 +39,7 @@ public class AuthService {
             return false;
         }
 
-        Role role = roleJpa.findByName("ROLE_USER");
+        Role role = roleJpa.findByName("USER");
 
         Users user = Users.builder()
                 .name(signUpRequest.getName())
